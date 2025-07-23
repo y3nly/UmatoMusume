@@ -5,51 +5,52 @@ namespace UmatoMusume.Utils
     public class Hook
     {
         public delegate void WinEventDelegate(
-            IntPtr hWinEventHook,
-            NativeMethods.SWEH_Events eventType,
-            IntPtr hwnd,
-            NativeMethods.SWEH_ObjectId idObject,
-            long idChild,
-            uint dwEventThread,
-            uint dwmsEventTime
+            IntPtr _hWinEventHook,
+            NativeMethods.SWEH_Events _eventType,
+            IntPtr _hwnd,
+            NativeMethods.SWEH_ObjectId _idObject,
+            long _idChild,
+            uint _dwEventThread,
+            uint _dwmsEventTime
         );
 
         public static IntPtr WinEventHookRange(
-            NativeMethods.SWEH_Events eventFrom, NativeMethods.SWEH_Events eventTo,
-            WinEventDelegate eventDelegate,
-            uint idProcess, uint idThread)
+            NativeMethods.SWEH_Events _eventFrom, NativeMethods.SWEH_Events _eventTo,
+            WinEventDelegate _eventDelegate,
+            uint _idProcess, uint _idThread)
         {
             return NativeMethods.SetWinEventHook(
-                eventFrom, eventTo,
-                IntPtr.Zero, eventDelegate,
-                idProcess, idThread,
+                _eventFrom, _eventTo,
+                IntPtr.Zero, _eventDelegate,
+                _idProcess, _idThread,
                 NativeMethods.WinEventHookInternalFlags);
         }
 
         public static IntPtr WinEventHookOne(
-            NativeMethods.SWEH_Events eventId,
-            WinEventDelegate eventDelegate,
-            uint idProcess,
-            uint idThread)
+            NativeMethods.SWEH_Events _eventId,
+            WinEventDelegate _eventDelegate,
+            uint _idProcess,
+            uint _idThread)
         {
             return NativeMethods.SetWinEventHook(
-                eventId, eventId,
-                IntPtr.Zero, eventDelegate,
-                idProcess, idThread,
+                _eventId, _eventId,
+                IntPtr.Zero, _eventDelegate,
+                _idProcess, _idThread,
                 NativeMethods.WinEventHookInternalFlags);
         }
 
-        public static bool WinEventUnhook(IntPtr hWinEventHook) =>
-            NativeMethods.UnhookWinEvent(hWinEventHook);
+        public static bool WinEventUnhook(IntPtr _hWinEventHook) =>
+            NativeMethods.UnhookWinEvent(_hWinEventHook);
 
-        public static uint GetWindowThread(IntPtr hWnd)
+        public static uint GetWindowThread(IntPtr _hWnd)
         {
-            return NativeMethods.GetWindowThreadProcessId(hWnd, IntPtr.Zero);
+            uint _dummyProcessId;
+            return NativeMethods.GetWindowThreadProcessId(_hWnd, out _dummyProcessId);
         }
 
-        public static NativeMethods.RECT GetWindowRectangle(IntPtr hWnd)
+        public static NativeMethods.RECT GetWindowRectangle(IntPtr _hWnd)
         {
-            NativeMethods.DwmGetWindowAttribute(hWnd,
+            NativeMethods.DwmGetWindowAttribute(_hWnd,
                 NativeMethods.DWMWINDOWATTRIBUTE.DWMWA_EXTENDED_FRAME_BOUNDS,
                 out NativeMethods.RECT rect, Marshal.SizeOf<NativeMethods.RECT>());
             return rect;
@@ -200,27 +201,24 @@ namespace UmatoMusume.Utils
             SWEH_dwFlags.WINEVENT_SKIPOWNTHREAD;
 
         [DllImport("dwmapi.dll", SetLastError = true)]
-        internal static extern int DwmGetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out RECT pvAttribute, int cbAttribute);
+        internal static extern int DwmGetWindowAttribute(IntPtr _hwnd, DWMWINDOWATTRIBUTE _dwAttribute, out RECT _pvAttribute, int _cbAttribute);
 
         [DllImport("user32.dll", SetLastError = true)]
-        internal static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-
-        [DllImport("user32.dll")]
-        internal static extern uint GetWindowThreadProcessId(IntPtr hWnd, IntPtr voidProcessId);
+        internal static extern uint GetWindowThreadProcessId(IntPtr _hWnd, out uint _lpdwProcessId);
 
         [DllImport("user32.dll", SetLastError = false)]
         internal static extern IntPtr SetWinEventHook(
-            SWEH_Events eventMin,
-            SWEH_Events eventMax,
-            IntPtr hmodWinEventProc,
-            Hook.WinEventDelegate lpfnWinEventProc,
-            uint idProcess, uint idThread,
-            SWEH_dwFlags dwFlags);
+            SWEH_Events _eventMin,
+            SWEH_Events _eventMax,
+            IntPtr _hmodWinEventProc,
+            Hook.WinEventDelegate _lpfnWinEventProc,
+            uint _idProcess, uint _idThread,
+            SWEH_dwFlags _dwFlags);
 
         [DllImport("user32.dll", SetLastError = false)]
-        internal static extern bool UnhookWinEvent(IntPtr hWinEventHook);
+        internal static extern bool UnhookWinEvent(IntPtr _hWinEventHook);
 
         [DllImport("user32.dll")]
-        internal static extern bool IsIconic(IntPtr hWnd);
+        internal static extern bool IsIconic(IntPtr _hWnd);
     }
 }
