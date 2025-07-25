@@ -351,6 +351,7 @@ namespace UmatoMusume
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
+            var test = UmaData.LoadList();
             _ = InitConfig();
         }
     }

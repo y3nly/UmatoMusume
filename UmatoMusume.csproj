@@ -30,6 +30,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.7" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.11" />
 		<PackageReference Include="System.Drawing.Common" Version="9.0.7" />
 		<PackageReference Include="Tesseract" Version="5.2.0" />
@@ -38,6 +39,7 @@
 	<ItemGroup>
 		<None Include="tessdata\**" CopyToOutputDirectory="PreserveNewest" />
 		<None Include="UmamusumePD.sqlite" CopyToOutputDirectory="PreserveNewest" />
+		<None Include="Assets\**" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 
 </Project>
