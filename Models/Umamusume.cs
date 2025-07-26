@@ -60,7 +60,6 @@ namespace UmatoMusume.Models
             EventName = _eventName;
             EventOptions = _eventOptions;
         }
-
     }
 
 }

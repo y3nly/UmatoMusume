@@ -15,6 +15,7 @@ namespace UmatoMusume
         private Process? _targetProc = null;
         private Timer _attachTimer;
         private Timer _captureTimer;
+        private List<Umamusume> _umaList = new List<Umamusume>();
 
         protected Hook.WinEventDelegate _winEventDelegate;
         static GCHandle _gcSafetyHandle;
@@ -28,12 +29,10 @@ namespace UmatoMusume
         // Rectangles for storing captured areas
         private Rectangle? _eventOctRect = null;
         private Rectangle? _characterInfoRect = null;
-        private Rectangle? _eventTypeRect = null;
 
         // Offsets for each capture area (relative to process window)
         private Rectangle? _eventOctOffset = null;
         private Rectangle? _characterInfoOffset = null;
-        private Rectangle? _eventTypeOffset = null;
 
         public FrmMain()
         {
@@ -55,25 +54,22 @@ namespace UmatoMusume
             _captureTimer.Interval = CAPTURE_INTERVAL;
             _captureTimer.Tick += EventTimer_Tick;
             _captureTimer.Start();
+
+            _umaList = UmaData.LoadUmaList();
         }
 
-        private void EventTimer_Tick(object? sender, EventArgs e)
+        private async void EventTimer_Tick(object? sender, EventArgs e)
         {
             if (_processhWnd != IntPtr.Zero)
             {
                 if (_eventOctRect != null)
                 {
-                    lblEventName.Text = Detector.DetectText((Rectangle)_eventOctRect);
+                    lblEventName.Text = await Task.Run(() => Detector.DetectText((Rectangle)_eventOctRect));
                 }
 
                 if (_characterInfoRect != null)
                 {
-                    lblCharacterInfo.Text = Detector.DetectText((Rectangle)_characterInfoRect).Replace("\n", " ");
-                }
-
-                if (_eventTypeRect != null)
-                {
-                    lblEventType.Text = Detector.DetectText((Rectangle)_eventTypeRect);
+                    lblCharacterInfo.Text = await Task.Run(() => Detector.DetectText((Rectangle)_characterInfoRect).Replace("\n", " "));
                 }
             }
         }
@@ -133,15 +129,6 @@ namespace UmatoMusume
                     _characterInfoOffset.Value.Width,
                     _characterInfoOffset.Value.Height);
             }
-
-            if (_eventTypeOffset != null)
-            {
-                _eventTypeRect = new Rectangle(
-                    windowRect.Left + _eventTypeOffset.Value.X,
-                    windowRect.Top + _eventTypeOffset.Value.Y,
-                    _eventTypeOffset.Value.Width,
-                    _eventTypeOffset.Value.Height);
-            }
         }
 
         protected async void WinEventCallback(
@@ -182,18 +169,6 @@ namespace UmatoMusume
                         Y = _characterInfoRect.Value.Y,
                         Width = _characterInfoRect.Value.Width,
                         Height = _characterInfoRect.Value.Height
-                    });
-                }
-
-                if (_eventTypeRect != null)
-                {
-                    await _rectConfigData.Upsert(new RectConfig
-                    {
-                        RectName = "EVENT_TYPE_RECT",
-                        X = _eventTypeRect.Value.X,
-                        Y = _eventTypeRect.Value.Y,
-                        Width = _eventTypeRect.Value.Width,
-                        Height = _eventTypeRect.Value.Height
                     });
                 }
 
@@ -283,34 +258,6 @@ namespace UmatoMusume
             return;
         }
 
-        private async void btnCaptureEventType_Click(object sender, EventArgs e)
-        {
-            _eventTypeRect = Detector.CaptureArea(_processhWnd);
-
-            if (_eventTypeRect == null)
-            {
-                MessageBox.Show("Please select an area to capture.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            var windowRect = Hook.GetWindowRectangle(_processhWnd).ToRectangle();
-
-            _eventTypeOffset = new Rectangle(
-                _eventTypeRect.Value.X - windowRect.Left,
-                _eventTypeRect.Value.Y - windowRect.Top,
-                _eventTypeRect.Value.Width,
-                _eventTypeRect.Value.Height);
-
-            await _rectConfigData.Upsert(new RectConfig
-            {
-                RectName = "EVENT_TYPE_RECT",
-                X = _eventTypeRect.Value.X,
-                Y = _eventTypeRect.Value.Y,
-                Width = _eventTypeRect.Value.Width,
-                Height = _eventTypeRect.Value.Height
-            });
-        }
-
         private async Task InitConfig()
         {
             var eventRect = await _rectConfigData.Get("EVENT_RECT");
@@ -319,7 +266,6 @@ namespace UmatoMusume
             var windowRect = Hook.GetWindowRectangle(_processhWnd).ToRectangle();
             _eventOctRect = eventRect?.ToRectangle() ?? null;
             _characterInfoRect = charInfoRect?.ToRectangle() ?? null;
-            _eventTypeRect = eventTypeRect?.ToRectangle() ?? null;
 
             if (_eventOctRect != null)
             {
@@ -338,21 +284,54 @@ namespace UmatoMusume
                     _characterInfoRect.Value.Width,
                     _characterInfoRect.Value.Height);
             }
-
-            if (_eventTypeRect != null)
-            {
-                _eventTypeOffset = new Rectangle(
-                    _eventTypeRect.Value.X - windowRect.Left,
-                    _eventTypeRect.Value.Y - windowRect.Top,
-                    _eventTypeRect.Value.Width,
-                    _eventTypeRect.Value.Height);
-            }
         }
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            var test = UmaData.LoadList();
             _ = InitConfig();
+        }
+
+        private void SetData()
+        {
+            if (lblCharacterInfo.Text != string.Empty && lblEventName.Text != string.Empty)
+            {
+                var options = _umaList.GetUmaEventOptions(lblCharacterInfo.Text, lblEventName.Text);
+                if (options.Count > 0)
+                {
+                    rtbOptions.Clear();
+                    foreach (var option in options.SelectMany(x => x))
+                    {
+                        rtbOptions.SelectionFont = new Font(rtbOptions.Font, FontStyle.Bold);
+                        rtbOptions.AppendText(option.Key + ":\n");
+
+                        rtbOptions.SelectionFont = new Font(rtbOptions.Font, FontStyle.Regular);
+                        rtbOptions.AppendText(option.Value + "\n---------------\n");
+                    }
+                }
+
+                var objectives = _umaList.GetUmaObjectives(lblCharacterInfo.Text);
+                if (objectives.Count > 0)
+                {
+                    rtbObjectives.Clear();
+                    foreach (var objective in objectives)
+                    {
+                        rtbObjectives.SelectionFont = new Font(rtbObjectives.Font, FontStyle.Bold);
+                        rtbObjectives.AppendText(objective.ObjectiveName + ":\n");
+                        rtbObjectives.SelectionFont = new Font(rtbObjectives.Font, FontStyle.Regular);
+                        rtbObjectives.AppendText($"Turn: {objective.Turn} \nTime: {objective.Time} \nCondition: {objective.ObjectiveCondition}\n");
+                    }
+                }
+            }
+        }
+
+        private void lblEventName_TextChanged(object sender, EventArgs e) => SetData();
+
+        private void lblCharacterInfo_TextChanged(object sender, EventArgs e) => SetData();
+
+        private void btnDownloadUmaData_Click(object sender, EventArgs e)
+        {
+            FrmDownload frmDownload = new FrmDownload();
+            frmDownload.ShowDialog();
         }
     }
 }
