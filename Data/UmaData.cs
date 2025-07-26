@@ -6,19 +6,6 @@ namespace UmatoMusume.Data
 {
     public static class UmaData
     {
-        private const string FOLDER_NAME = "Assets";
-        private const string FILE_NAME = "uma_data.json";
-
-        public static List<Umamusume> LoadUmaList()
-        {
-            using (StreamReader r = new StreamReader(Path.Combine(FOLDER_NAME, FILE_NAME)))
-            {
-                string umaDataJson = r.ReadToEnd();
-                List<Umamusume> umaList = JsonConvert.DeserializeObject<List<Umamusume>>(umaDataJson) ?? new List<Umamusume>();
-                return umaList;
-            }
-        }
-
         public static List<UmaObjective> GetUmaObjectives(this List<Umamusume> _umas, string _umaName)
         {
             return _umas.Where(x => x.UmaName.Contains(_umaName))

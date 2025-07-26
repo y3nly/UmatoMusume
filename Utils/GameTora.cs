@@ -42,13 +42,13 @@ namespace UmatoMusume.Utils
                 var urlList = new List<string>();
                 var umaDataList = new List<Umamusume>();
 
-                var accept = Utils.FindElementSafe(driver, By.CssSelector("body > div#__next > div[class*=legal_cookie_banner_wrapper__] > div > div[class*=legal_cookie_banner_selection__] > div:last-child > button[class*=legal_cookie_banner_button__]"));
+                var accept = Helper.FindElementSafe(driver, By.CssSelector("body > div#__next > div[class*=legal_cookie_banner_wrapper__] > div > div[class*=legal_cookie_banner_selection__] > div:last-child > button[class*=legal_cookie_banner_button__]"));
                 accept?.Click();
 
-                var option = Utils.FindElementSafe(driver, By.CssSelector("body > div#__next > div > div[class*=styles_page__] > header[id*=styles_page-header__] > div[class*=styles_header_settings__]"));
+                var option = Helper.FindElementSafe(driver, By.CssSelector("body > div#__next > div > div[class*=styles_page__] > header[id*=styles_page-header__] > div[class*=styles_header_settings__]"));
                 option?.Click();
 
-                var menuOption = Utils.FindElementSafe(driver, By.CssSelector("body > div[data-tippy-root] > div.tippy-box > div.tippy-content > div > div[class*=tooltips_tooltip__] > div:last-child > div:last-child  > div:last-child > label"));
+                var menuOption = Helper.FindElementSafe(driver, By.CssSelector("body > div[data-tippy-root] > div.tippy-box > div.tippy-content > div > div[class*=tooltips_tooltip__] > div:last-child > div:last-child  > div:last-child > label"));
                 menuOption?.Click();
 
                 await Task.Delay(DELAY_TIME * 2);
@@ -81,17 +81,17 @@ namespace UmatoMusume.Utils
 
                     driver.Navigate().GoToUrl(url);
                     await Task.Delay(DELAY_TIME);
-                    var nameElement = Utils.FindElementSafe(driver, By.CssSelector("body > div#__next > div > div > main > main > div:last-child > div > div[class*=characters_infobox_top] > div[class*=characters_infobox_character_name] > a"));
+                    var nameElement = Helper.FindElementSafe(driver, By.CssSelector("body > div#__next > div > div > main > main > div:last-child > div > div[class*=characters_infobox_top] > div[class*=characters_infobox_character_name] > a"));
                     var name = nameElement?.GetAttribute("innerText")?.Replace("\n", "") ?? "";
 
-                    var objectives = Utils.FindElementsSafe(driver, By.CssSelector("body > div#__next > div > div > main > main > div:last-child > div > div[class*=characters_objective_box] > div[class*=characters_objective]"));
+                    var objectives = Helper.FindElementsSafe(driver, By.CssSelector("body > div#__next > div > div > main > main > div:last-child > div > div[class*=characters_objective_box] > div[class*=characters_objective]"));
                     var t = new List<UmaObjective>();
                     foreach (var objective in objectives)
                     {
-                        var objectiveName = Utils.FindElementSafe(objective, By.CssSelector("div[class*=characters_objective_text] > div:nth-of-type(1)"));
-                        var turn = Utils.FindElementSafe(objective, By.CssSelector("div[class*=characters_objective_text] > div:nth-of-type(2)"));
-                        var time = Utils.FindElementSafe(objective, By.CssSelector("div[class*=characters_objective_text] > div:nth-of-type(3)"));
-                        var objectiveCondition = Utils.FindElementSafe(objective, By.CssSelector("div[class*=characters_objective_text] > div:nth-of-type(4)"));
+                        var objectiveName = Helper.FindElementSafe(objective, By.CssSelector("div[class*=characters_objective_text] > div:nth-of-type(1)"));
+                        var turn = Helper.FindElementSafe(objective, By.CssSelector("div[class*=characters_objective_text] > div:nth-of-type(2)"));
+                        var time = Helper.FindElementSafe(objective, By.CssSelector("div[class*=characters_objective_text] > div:nth-of-type(3)"));
+                        var objectiveCondition = Helper.FindElementSafe(objective, By.CssSelector("div[class*=characters_objective_text] > div:nth-of-type(4)"));
 
                         t.Add(
                             new UmaObjective(
@@ -103,11 +103,11 @@ namespace UmatoMusume.Utils
                         );
                     }
 
-                    var eventBoxes = Utils.FindElementsSafe(driver, By.CssSelector("body > div#__next > div > div > main > main > div:last-child > div > div:last-child > div > div[class*=eventhelper_elist]"));
+                    var eventBoxes = Helper.FindElementsSafe(driver, By.CssSelector("body > div#__next > div > div > main > main > div:last-child > div > div:last-child > div > div[class*=eventhelper_elist]"));
                     var events = new List<UmaEvent>();
                     foreach (var eventBox in eventBoxes)
                     {
-                        var eventElements = Utils.FindElementsSafe(eventBox, By.CssSelector("div[class*=compatibility_viewer_item]"));
+                        var eventElements = Helper.FindElementsSafe(eventBox, By.CssSelector("div[class*=compatibility_viewer_item]"));
                         foreach (var eventElement in eventElements)
                         {
                             var eventName = eventElement.GetAttribute("innerText") ?? "";
@@ -116,11 +116,11 @@ namespace UmatoMusume.Utils
 
                             await Task.Delay(DELAY_TIME);
 
-                            var trs = Utils.FindElementsSafe(eventBox, By.CssSelector("div[data-tippy-root] > div > div > div > div > div > table[class*=tooltips_ttable__] > tbody > tr"));
+                            var trs = Helper.FindElementsSafe(eventBox, By.CssSelector("div[data-tippy-root] > div > div > div > div > div > table[class*=tooltips_ttable__] > tbody > tr"));
                             foreach (var tr in trs)
                             {
-                                var eventOption = Utils.FindElementSafe(tr, By.CssSelector("td:nth-of-type(1)"));
-                                var eventValue = Utils.FindElementSafe(tr, By.CssSelector("td:nth-of-type(2)"));
+                                var eventOption = Helper.FindElementSafe(tr, By.CssSelector("td:nth-of-type(1)"));
+                                var eventValue = Helper.FindElementSafe(tr, By.CssSelector("td:nth-of-type(2)"));
                                 events.Add(
                                     new UmaEvent(
                                         eventName,
@@ -134,7 +134,7 @@ namespace UmatoMusume.Utils
 
                             if (!trs.Any())
                             {
-                                var noChoices = Utils.FindElementsSafe(eventBox, By.CssSelector("div[data-tippy-root] > div > div > div > div > div > div[class*=tooltips_ttable_cell___] > div"));
+                                var noChoices = Helper.FindElementsSafe(eventBox, By.CssSelector("div[data-tippy-root] > div > div > div > div > div > div[class*=tooltips_ttable_cell___] > div"));
                                 foreach (var noChoice in noChoices)
                                 {
                                     var eventOption = noChoice.GetAttribute("innerText") ?? "";
@@ -155,7 +155,7 @@ namespace UmatoMusume.Utils
                 }
 
                 progress?.Report((PROGRESS_SAVING, PROGRESS_TOTAL, "Saving data..."));
-                Utils.SaveAsJson(umaDataList, savePath);
+                Helper.SaveAsJson(umaDataList, savePath);
 
                 progress?.Report((PROGRESS_COMPLETE, PROGRESS_TOTAL, "Complete!"));
                 Cursor.Current = Cursors.Default;
@@ -187,13 +187,13 @@ namespace UmatoMusume.Utils
                 var urlList = new List<string>();
                 var supportCardList = new List<SupportCard>();
 
-                var accept = Utils.FindElementSafe(driver, By.CssSelector("body > div#__next > div[class*=legal_cookie_banner_wrapper__] > div > div[class*=legal_cookie_banner_selection__] > div:last-child > button[class*=legal_cookie_banner_button__]"));
+                var accept = Helper.FindElementSafe(driver, By.CssSelector("body > div#__next > div[class*=legal_cookie_banner_wrapper__] > div > div[class*=legal_cookie_banner_selection__] > div:last-child > button[class*=legal_cookie_banner_button__]"));
                 accept?.Click();
 
-                var option = Utils.FindElementSafe(driver, By.CssSelector("body > div#__next > div > div[class*=styles_page__] > header[id*=styles_page-header__] > div[class*=styles_header_settings__]"));
+                var option = Helper.FindElementSafe(driver, By.CssSelector("body > div#__next > div > div[class*=styles_page__] > header[id*=styles_page-header__] > div[class*=styles_header_settings__]"));
                 option?.Click();
 
-                var menuOption = Utils.FindElementSafe(driver, By.CssSelector("body > div[data-tippy-root] > div.tippy-box > div.tippy-content > div > div[class*=tooltips_tooltip__] > div:last-child > div:last-child  > div:last-child > label"));
+                var menuOption = Helper.FindElementSafe(driver, By.CssSelector("body > div[data-tippy-root] > div.tippy-box > div.tippy-content > div > div[class*=tooltips_tooltip__] > div:last-child > div:last-child  > div:last-child > label"));
                 menuOption?.Click();
 
                 await Task.Delay(DELAY_TIME * 2);
@@ -227,10 +227,10 @@ namespace UmatoMusume.Utils
                     driver.Navigate().GoToUrl(url);
                     await Task.Delay(DELAY_TIME);
 
-                    var eventBoxes = Utils.FindElementsSafe(driver, By.CssSelector("body > div#__next > div > div > main > main > div:last-child > div > div:last-child > div > div[class*=eventhelper_elist]"));
+                    var eventBoxes = Helper.FindElementsSafe(driver, By.CssSelector("body > div#__next > div > div > main > main > div:last-child > div > div:last-child > div > div[class*=eventhelper_elist]"));
                     foreach (var eventBox in eventBoxes)
                     {
-                        var eventElements = Utils.FindElementsSafe(eventBox, By.CssSelector("div[class*=compatibility_viewer_item]"));
+                        var eventElements = Helper.FindElementsSafe(eventBox, By.CssSelector("div[class*=compatibility_viewer_item]"));
                         foreach (var eventElement in eventElements)
                         {
                             var eventName = eventElement.GetAttribute("innerText") ?? "";
@@ -239,11 +239,11 @@ namespace UmatoMusume.Utils
 
                             await Task.Delay(DELAY_TIME);
 
-                            var trs = Utils.FindElementsSafe(eventBox, By.CssSelector("div[data-tippy-root] > div > div > div > div > div > table[class*=tooltips_ttable__] > tbody > tr"));
+                            var trs = Helper.FindElementsSafe(eventBox, By.CssSelector("div[data-tippy-root] > div > div > div > div > div > table[class*=tooltips_ttable__] > tbody > tr"));
                             foreach (var tr in trs)
                             {
-                                var eventOption = Utils.FindElementSafe(tr, By.CssSelector("td:nth-of-type(1)"));
-                                var eventValue = Utils.FindElementSafe(tr, By.CssSelector("td:nth-of-type(2)"));
+                                var eventOption = Helper.FindElementSafe(tr, By.CssSelector("td:nth-of-type(1)"));
+                                var eventValue = Helper.FindElementSafe(tr, By.CssSelector("td:nth-of-type(2)"));
                                 supportCardList.Add(
                                     new SupportCard(
                                         eventName,
@@ -257,7 +257,7 @@ namespace UmatoMusume.Utils
 
                             if (!trs.Any())
                             {
-                                var noChoices = Utils.FindElementsSafe(eventBox, By.CssSelector("div[data-tippy-root] > div > div > div > div > div > div[class*=tooltips_ttable_cell___] > div"));
+                                var noChoices = Helper.FindElementsSafe(eventBox, By.CssSelector("div[data-tippy-root] > div > div > div > div > div > div[class*=tooltips_ttable_cell___] > div"));
                                 foreach (var noChoice in noChoices)
                                 {
                                     var eventOption = noChoice.GetAttribute("innerText") ?? "";
@@ -277,7 +277,7 @@ namespace UmatoMusume.Utils
                 }
 
                 progress?.Report((PROGRESS_SAVING, PROGRESS_TOTAL, "Saving data..."));
-                Utils.SaveAsJson(supportCardList, savePath);
+                Helper.SaveAsJson(supportCardList, savePath);
 
                 progress?.Report((PROGRESS_COMPLETE, PROGRESS_TOTAL, "Complete!"));
                 Cursor.Current = Cursors.Default;

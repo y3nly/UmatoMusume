@@ -54,7 +54,7 @@
             groupBox1.Margin = new Padding(3, 4, 3, 4);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(3, 4, 3, 4);
-            groupBox1.Size = new Size(483, 108);
+            groupBox1.Size = new Size(416, 108);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Capture options";
@@ -63,7 +63,7 @@
             // 
             btnDownloadUmaData.Location = new Point(7, 67);
             btnDownloadUmaData.Name = "btnDownloadUmaData";
-            btnDownloadUmaData.Size = new Size(464, 29);
+            btnDownloadUmaData.Size = new Size(403, 29);
             btnDownloadUmaData.TabIndex = 2;
             btnDownloadUmaData.Text = "Download data";
             btnDownloadUmaData.UseVisualStyleBackColor = true;
@@ -71,10 +71,10 @@
             // 
             // btnCaptureCharInfo
             // 
-            btnCaptureCharInfo.Location = new Point(238, 29);
+            btnCaptureCharInfo.Location = new Point(215, 29);
             btnCaptureCharInfo.Margin = new Padding(3, 4, 3, 4);
             btnCaptureCharInfo.Name = "btnCaptureCharInfo";
-            btnCaptureCharInfo.Size = new Size(233, 31);
+            btnCaptureCharInfo.Size = new Size(195, 31);
             btnCaptureCharInfo.TabIndex = 1;
             btnCaptureCharInfo.Text = "Capture character info";
             btnCaptureCharInfo.UseVisualStyleBackColor = true;
@@ -85,7 +85,7 @@
             btnCaptureEvent.Location = new Point(7, 29);
             btnCaptureEvent.Margin = new Padding(3, 4, 3, 4);
             btnCaptureEvent.Name = "btnCaptureEvent";
-            btnCaptureEvent.Size = new Size(225, 31);
+            btnCaptureEvent.Size = new Size(202, 31);
             btnCaptureEvent.TabIndex = 0;
             btnCaptureEvent.Text = "Capture event";
             btnCaptureEvent.UseVisualStyleBackColor = true;
@@ -102,16 +102,17 @@
             groupBox2.Margin = new Padding(3, 4, 3, 4);
             groupBox2.Name = "groupBox2";
             groupBox2.Padding = new Padding(3, 4, 3, 4);
-            groupBox2.Size = new Size(485, 317);
+            groupBox2.Size = new Size(416, 317);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "Event selector";
             // 
             // rtbOptions
             // 
+            rtbOptions.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             rtbOptions.Location = new Point(7, 94);
             rtbOptions.Name = "rtbOptions";
-            rtbOptions.Size = new Size(464, 192);
+            rtbOptions.Size = new Size(403, 216);
             rtbOptions.TabIndex = 6;
             rtbOptions.Text = "";
             // 
@@ -165,7 +166,7 @@
             groupBox3.Margin = new Padding(3, 4, 3, 4);
             groupBox3.Name = "groupBox3";
             groupBox3.Padding = new Padding(3, 4, 3, 4);
-            groupBox3.Size = new Size(485, 585);
+            groupBox3.Size = new Size(416, 585);
             groupBox3.TabIndex = 2;
             groupBox3.TabStop = false;
             groupBox3.Text = "Objectives";
@@ -175,7 +176,7 @@
             rtbObjectives.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             rtbObjectives.Location = new Point(7, 27);
             rtbObjectives.Name = "rtbObjectives";
-            rtbObjectives.Size = new Size(464, 551);
+            rtbObjectives.Size = new Size(403, 551);
             rtbObjectives.TabIndex = 0;
             rtbObjectives.Text = "";
             // 
@@ -183,7 +184,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(511, 1055);
+            ClientSize = new Size(439, 1055);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);

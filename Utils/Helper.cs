@@ -1,4 +1,4 @@
-﻿using OpenQA.Selenium;
+﻿   using OpenQA.Selenium;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace UmatoMusume.Utils
 {
-    public class Utils
+    public class Helper
     {
         public static IWebElement? FindElementSafe(ISearchContext driver, By by)
         {
@@ -47,14 +47,12 @@ namespace UmatoMusume.Utils
         {
             try
             {
-                // Ensure directory exists
                 string? directory = Path.GetDirectoryName(filePath);
                 if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
                 {
                     Directory.CreateDirectory(directory);
                 }
 
-                // Serialize and save
                 string json = JsonConvert.SerializeObject(items, formatting);
                 File.WriteAllText(filePath, json, Encoding.UTF8);
                 return true;

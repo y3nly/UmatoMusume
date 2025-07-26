@@ -485,10 +485,3 @@ $RECYCLE.BIN/
 
 # Migrations Folder
 Migrations/
-
-# Sqlite database files
-*.db
-*.sqlite
-*.sqlite3
-*.sqlite-shm
-*.sqlite-wal

@@ -16,15 +16,18 @@ namespace UmatoMusume
         private Timer _attachTimer;
         private Timer _captureTimer;
         private List<Umamusume> _umaList = new List<Umamusume>();
+        private List<SupportCard> _supportCardList = new List<SupportCard>();
 
         protected Hook.WinEventDelegate _winEventDelegate;
         static GCHandle _gcSafetyHandle;
 
         private const int OFFSET_HEIGHT = 6;
-        private const string TARGET_PROCESS_NAME = "mspaint";
+        private const string TARGET_PROCESS_NAME = "UmamusumePrettyDerby";
         private const string FORM_TITLE = "UmatoMusume - Process Window Capture";
         private const int ATTACH_INTERVAL = 500;
         private const int CAPTURE_INTERVAL = 1000;
+        private const string UMA_DATA_PATH = "Assets/uma_data.json";
+        private const string SUPPORT_CARD_PATH = "Assets/support_card.json";
 
         // Rectangles for storing captured areas
         private Rectangle? _eventOctRect = null;
@@ -55,7 +58,8 @@ namespace UmatoMusume
             _captureTimer.Tick += EventTimer_Tick;
             _captureTimer.Start();
 
-            _umaList = UmaData.LoadUmaList();
+            _umaList = Helper.LoadFromJson<Umamusume>(UMA_DATA_PATH);
+            _supportCardList = Helper.LoadFromJson<SupportCard>(SUPPORT_CARD_PATH);
         }
 
         private async void EventTimer_Tick(object? sender, EventArgs e)
@@ -296,17 +300,37 @@ namespace UmatoMusume
             if (lblCharacterInfo.Text != string.Empty && lblEventName.Text != string.Empty)
             {
                 var options = _umaList.GetUmaEventOptions(lblCharacterInfo.Text, lblEventName.Text);
-                if (options.Count > 0)
+                if (options.Any())
                 {
                     rtbOptions.Clear();
                     foreach (var option in options.SelectMany(x => x))
                     {
-                        rtbOptions.SelectionFont = new Font(rtbOptions.Font, FontStyle.Bold);
-                        rtbOptions.AppendText(option.Key + ":\n");
+                        if (!string.IsNullOrEmpty(option.Key)) {
+                            rtbOptions.SelectionFont = new Font(rtbOptions.Font, FontStyle.Bold);
+                            rtbOptions.AppendText(option.Key + ":\n");
+                        }
 
                         rtbOptions.SelectionFont = new Font(rtbOptions.Font, FontStyle.Regular);
                         rtbOptions.AppendText(option.Value + "\n---------------\n");
                     }
+                } 
+                else
+                {
+                    var cardOptions = _supportCardList.GetSupportCardEventOptions(lblEventName.Text);
+                    if (cardOptions.Any())
+                    {
+                        rtbOptions.Clear();
+                        foreach (var option in cardOptions.SelectMany(x => x))
+                        {
+                            if (!string.IsNullOrEmpty(option.Key)) {
+                                rtbOptions.SelectionFont = new Font(rtbOptions.Font, FontStyle.Bold);
+                                rtbOptions.AppendText(option.Key + ":\n");
+                            }
+                            rtbOptions.SelectionFont = new Font(rtbOptions.Font, FontStyle.Regular);
+                            rtbOptions.AppendText(option.Value + "\n---------------\n");
+                        }
+                    }
+                    
                 }
 
                 var objectives = _umaList.GetUmaObjectives(lblCharacterInfo.Text);
