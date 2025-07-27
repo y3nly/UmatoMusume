@@ -17,6 +17,7 @@ namespace UmatoMusume
         private Timer _captureTimer;
         private List<Umamusume> _umaList = new List<Umamusume>();
         private List<SupportCard> _supportCardList = new List<SupportCard>();
+        private string _umaCharacterName = string.Empty;
 
         protected Hook.WinEventDelegate _winEventDelegate;
         static GCHandle _gcSafetyHandle;
@@ -71,9 +72,10 @@ namespace UmatoMusume
                     lblEventName.Text = await Task.Run(() => Detector.DetectText((Rectangle)_eventOctRect));
                 }
 
-                if (_characterInfoRect != null)
+                if (_characterInfoRect != null && string.IsNullOrEmpty(_umaCharacterName))
                 {
                     lblCharacterInfo.Text = await Task.Run(() => Detector.DetectText((Rectangle)_characterInfoRect).Replace("\n", " "));
+                    _umaCharacterName = lblCharacterInfo.Text;
                 }
             }
         }
@@ -216,7 +218,6 @@ namespace UmatoMusume
             }
 
             var windowRect = Hook.GetWindowRectangle(_processhWnd).ToRectangle();
-
             _eventOctOffset = new Rectangle(
                 _eventOctRect.Value.X - windowRect.Left,
                 _eventOctRect.Value.Y - windowRect.Top,
@@ -244,6 +245,8 @@ namespace UmatoMusume
                 return;
             }
 
+            _umaCharacterName = string.Empty;
+
             var windowRect = Hook.GetWindowRectangle(_processhWnd).ToRectangle();
             _characterInfoOffset = new Rectangle(
                 _characterInfoRect.Value.X - windowRect.Left,
@@ -266,7 +269,6 @@ namespace UmatoMusume
         {
             var eventRect = await _rectConfigData.Get("EVENT_RECT");
             var charInfoRect = await _rectConfigData.Get("CHARACTER_INFO_RECT");
-            var eventTypeRect = await _rectConfigData.Get("EVENT_TYPE_RECT");
             var windowRect = Hook.GetWindowRectangle(_processhWnd).ToRectangle();
             _eventOctRect = eventRect?.ToRectangle() ?? null;
             _characterInfoRect = charInfoRect?.ToRectangle() ?? null;
@@ -297,12 +299,30 @@ namespace UmatoMusume
 
         private void SetData()
         {
+            rtbOptions.Clear();
+
+            if (lblCharacterInfo.Text != string.Empty)
+            {
+                var objectives = _umaList.GetUmaObjectives(lblCharacterInfo.Text);
+                if (objectives.Count > 0)
+                {
+                    rtbObjectives.Clear();
+                    foreach (var objective in objectives)
+                    {
+                        rtbObjectives.SelectionFont = new Font(rtbObjectives.Font, FontStyle.Bold);
+                        rtbObjectives.AppendText(objective.ObjectiveName + ":\n");
+                        rtbObjectives.SelectionFont = new Font(rtbObjectives.Font, FontStyle.Regular);
+                        rtbObjectives.AppendText($"Turn: {objective.Turn} \nTime: {objective.Time} \nCondition: {objective.ObjectiveCondition}\n");
+                    }
+                }
+            }
+
+
             if (lblCharacterInfo.Text != string.Empty && lblEventName.Text != string.Empty)
             {
                 var options = _umaList.GetUmaEventOptions(lblCharacterInfo.Text, lblEventName.Text);
                 if (options.Any())
                 {
-                    rtbOptions.Clear();
                     foreach (var option in options.SelectMany(x => x))
                     {
                         if (!string.IsNullOrEmpty(option.Key)) {
@@ -319,7 +339,6 @@ namespace UmatoMusume
                     var cardOptions = _supportCardList.GetSupportCardEventOptions(lblEventName.Text);
                     if (cardOptions.Any())
                     {
-                        rtbOptions.Clear();
                         foreach (var option in cardOptions.SelectMany(x => x))
                         {
                             if (!string.IsNullOrEmpty(option.Key)) {
@@ -331,19 +350,6 @@ namespace UmatoMusume
                         }
                     }
                     
-                }
-
-                var objectives = _umaList.GetUmaObjectives(lblCharacterInfo.Text);
-                if (objectives.Count > 0)
-                {
-                    rtbObjectives.Clear();
-                    foreach (var objective in objectives)
-                    {
-                        rtbObjectives.SelectionFont = new Font(rtbObjectives.Font, FontStyle.Bold);
-                        rtbObjectives.AppendText(objective.ObjectiveName + ":\n");
-                        rtbObjectives.SelectionFont = new Font(rtbObjectives.Font, FontStyle.Regular);
-                        rtbObjectives.AppendText($"Turn: {objective.Turn} \nTime: {objective.Time} \nCondition: {objective.ObjectiveCondition}\n");
-                    }
                 }
             }
         }
