@@ -97,7 +97,7 @@ namespace UmatoMusume.Utils
                 {
                     using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default))
                     {
-                        engine.SetVariable("tessedit_char_whitelist", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz '!,♪?☆():.-");
+                        engine.SetVariable("tessedit_char_whitelist", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz '!,♪?☆():.-1234567890");
                         engine.SetVariable("tessedit_pageseg_mode", "7");
                         engine.SetVariable("user_defined_dpi", "300");
 

@@ -46,9 +46,9 @@ A Windows desktop application that assists players of Umamusume Pretty Derby by 
 4. The application will automatically recognize events and provide recommendations
 
 ## Building from Source
-The project uses .NET 9.0 and can be built using Visual Studio or the .NET CLI:
+- The project uses .NET 9.0 and can be built using Visual Studio or the .NET CLI:
 dotnet build
-You will need to migrate the database schema if you are building from source, then copy it to the output directory
+- You will need to migrate the database schema if you are building from source, then copy it to the output directory
 ## Dependencies
 - Microsoft.EntityFrameworkCore.Sqlite
 - Newtonsoft.Json

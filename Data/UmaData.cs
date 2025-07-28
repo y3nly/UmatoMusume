@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using UmatoMusume.Models;
+﻿using UmatoMusume.Models;
 using UmatoMusume.Utils;
 
 namespace UmatoMusume.Data
@@ -22,6 +21,12 @@ namespace UmatoMusume.Data
                 .Select(e => new Dictionary<string, string>(e.EventOptions))
                 .Distinct(new DictionaryComparer())
                 .ToList();
+        }
+
+        public static bool FindUmaByName(this List<Umamusume> _umas, string _umaName, out Umamusume? _uma)
+        {
+            _uma = _umas.FirstOrDefault(x => x.UmaName.Contains(_umaName));
+            return _uma != null;
         }
     }
 }

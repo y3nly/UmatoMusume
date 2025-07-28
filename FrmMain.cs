@@ -17,7 +17,6 @@ namespace UmatoMusume
         private Timer _captureTimer;
         private List<Umamusume> _umaList = new List<Umamusume>();
         private List<SupportCard> _supportCardList = new List<SupportCard>();
-        private string _umaCharacterName = string.Empty;
 
         protected Hook.WinEventDelegate _winEventDelegate;
         static GCHandle _gcSafetyHandle;
@@ -72,10 +71,9 @@ namespace UmatoMusume
                     lblEventName.Text = await Task.Run(() => Detector.DetectText((Rectangle)_eventOctRect));
                 }
 
-                if (_characterInfoRect != null && string.IsNullOrEmpty(_umaCharacterName))
+                if (_characterInfoRect != null)
                 {
                     lblCharacterInfo.Text = await Task.Run(() => Detector.DetectText((Rectangle)_characterInfoRect).Replace("\n", " "));
-                    _umaCharacterName = lblCharacterInfo.Text;
                 }
             }
         }
@@ -245,8 +243,6 @@ namespace UmatoMusume
                 return;
             }
 
-            _umaCharacterName = string.Empty;
-
             var windowRect = Hook.GetWindowRectangle(_processhWnd).ToRectangle();
             _characterInfoOffset = new Rectangle(
                 _characterInfoRect.Value.X - windowRect.Left,
@@ -325,7 +321,8 @@ namespace UmatoMusume
                 {
                     foreach (var option in options.SelectMany(x => x))
                     {
-                        if (!string.IsNullOrEmpty(option.Key)) {
+                        if (!string.IsNullOrEmpty(option.Key))
+                        {
                             rtbOptions.SelectionFont = new Font(rtbOptions.Font, FontStyle.Bold);
                             rtbOptions.AppendText(option.Key + ":\n");
                         }
@@ -333,7 +330,7 @@ namespace UmatoMusume
                         rtbOptions.SelectionFont = new Font(rtbOptions.Font, FontStyle.Regular);
                         rtbOptions.AppendText(option.Value + "\n---------------\n");
                     }
-                } 
+                }
                 else
                 {
                     var cardOptions = _supportCardList.GetSupportCardEventOptions(lblEventName.Text);
@@ -341,7 +338,8 @@ namespace UmatoMusume
                     {
                         foreach (var option in cardOptions.SelectMany(x => x))
                         {
-                            if (!string.IsNullOrEmpty(option.Key)) {
+                            if (!string.IsNullOrEmpty(option.Key))
+                            {
                                 rtbOptions.SelectionFont = new Font(rtbOptions.Font, FontStyle.Bold);
                                 rtbOptions.AppendText(option.Key + ":\n");
                             }
@@ -349,7 +347,7 @@ namespace UmatoMusume
                             rtbOptions.AppendText(option.Value + "\n---------------\n");
                         }
                     }
-                    
+
                 }
             }
         }
