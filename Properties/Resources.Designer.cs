@@ -59,5 +59,15 @@ namespace UmatoMusume.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] ProgramIcon {
+            get {
+                object obj = ResourceManager.GetObject("ProgramIcon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

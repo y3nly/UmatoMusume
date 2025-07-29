@@ -6,6 +6,7 @@
 		<Nullable>enable</Nullable>
 		<UseWindowsForms>true</UseWindowsForms>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<ApplicationIcon>Resources\09-This PC.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -43,6 +44,10 @@
 		<None Include="tessdata\**" CopyToOutputDirectory="PreserveNewest" />
 		<None Include="UmamusumePD.sqlite" CopyToOutputDirectory="PreserveNewest" />
 		<None Include="Assets\**" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Resources\09-This PC.ico" />
 	</ItemGroup>
 
 </Project>

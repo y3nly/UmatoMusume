@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDownload));
             groupBox1 = new GroupBox();
             btnCrawlSupport = new Button();
             btnCrawlUma = new Button();
@@ -44,18 +45,21 @@
             groupBox1.Controls.Add(btnDownloadSupport);
             groupBox1.Controls.Add(btnDownloadUma);
             groupBox1.Controls.Add(pbDownload);
-            groupBox1.Location = new Point(12, 12);
+            groupBox1.Location = new Point(10, 9);
+            groupBox1.Margin = new Padding(3, 2, 3, 2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(576, 156);
+            groupBox1.Padding = new Padding(3, 2, 3, 2);
+            groupBox1.Size = new Size(504, 117);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Downloader options";
             // 
             // btnCrawlSupport
             // 
-            btnCrawlSupport.Location = new Point(290, 61);
+            btnCrawlSupport.Location = new Point(254, 46);
+            btnCrawlSupport.Margin = new Padding(3, 2, 3, 2);
             btnCrawlSupport.Name = "btnCrawlSupport";
-            btnCrawlSupport.Size = new Size(280, 29);
+            btnCrawlSupport.Size = new Size(245, 22);
             btnCrawlSupport.TabIndex = 4;
             btnCrawlSupport.Text = "Crawl support data";
             btnCrawlSupport.UseVisualStyleBackColor = true;
@@ -63,9 +67,10 @@
             // 
             // btnCrawlUma
             // 
-            btnCrawlUma.Location = new Point(6, 61);
+            btnCrawlUma.Location = new Point(5, 46);
+            btnCrawlUma.Margin = new Padding(3, 2, 3, 2);
             btnCrawlUma.Name = "btnCrawlUma";
-            btnCrawlUma.Size = new Size(280, 29);
+            btnCrawlUma.Size = new Size(245, 22);
             btnCrawlUma.TabIndex = 3;
             btnCrawlUma.Text = "Crawl uma data";
             btnCrawlUma.UseVisualStyleBackColor = true;
@@ -73,9 +78,10 @@
             // 
             // btnDownloadSupport
             // 
-            btnDownloadSupport.Location = new Point(290, 26);
+            btnDownloadSupport.Location = new Point(254, 20);
+            btnDownloadSupport.Margin = new Padding(3, 2, 3, 2);
             btnDownloadSupport.Name = "btnDownloadSupport";
-            btnDownloadSupport.Size = new Size(280, 29);
+            btnDownloadSupport.Size = new Size(245, 22);
             btnDownloadSupport.TabIndex = 2;
             btnDownloadSupport.Text = "Download support data";
             btnDownloadSupport.UseVisualStyleBackColor = true;
@@ -83,9 +89,10 @@
             // 
             // btnDownloadUma
             // 
-            btnDownloadUma.Location = new Point(6, 26);
+            btnDownloadUma.Location = new Point(5, 20);
+            btnDownloadUma.Margin = new Padding(3, 2, 3, 2);
             btnDownloadUma.Name = "btnDownloadUma";
-            btnDownloadUma.Size = new Size(280, 29);
+            btnDownloadUma.Size = new Size(245, 22);
             btnDownloadUma.TabIndex = 1;
             btnDownloadUma.Text = "Download uma data";
             btnDownloadUma.UseVisualStyleBackColor = true;
@@ -93,17 +100,20 @@
             // 
             // pbDownload
             // 
-            pbDownload.Location = new Point(6, 121);
+            pbDownload.Location = new Point(5, 91);
+            pbDownload.Margin = new Padding(3, 2, 3, 2);
             pbDownload.Name = "pbDownload";
-            pbDownload.Size = new Size(564, 29);
+            pbDownload.Size = new Size(494, 22);
             pbDownload.TabIndex = 0;
             // 
             // FrmDownload
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(600, 176);
+            ClientSize = new Size(525, 132);
             Controls.Add(groupBox1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(3, 2, 3, 2);
             Name = "FrmDownload";
             Text = "Umamusume Data Downloader";
             groupBox1.ResumeLayout(false);
