@@ -41,6 +41,8 @@
             label1 = new Label();
             groupBox3 = new GroupBox();
             rtbObjectives = new RichTextBox();
+            splitterOptions = new Splitter();
+            splitterObjectives = new Splitter();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -51,9 +53,10 @@
             groupBox1.Controls.Add(btnDownloadUmaData);
             groupBox1.Controls.Add(btnCaptureCharInfo);
             groupBox1.Controls.Add(btnCaptureEvent);
-            groupBox1.Location = new Point(12, 12);
+            groupBox1.Dock = DockStyle.Top;
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(364, 81);
+            groupBox1.Padding = new Padding(12, 3, 12, 3);
+            groupBox1.Size = new Size(384, 81);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Capture options";
@@ -97,9 +100,10 @@
             groupBox2.Controls.Add(label4);
             groupBox2.Controls.Add(lblEventName);
             groupBox2.Controls.Add(label1);
-            groupBox2.Location = new Point(12, 99);
+            groupBox2.Dock = DockStyle.Top;
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(364, 238);
+            groupBox2.Padding = new Padding(12, 3, 12, 3);
+            groupBox2.Size = new Size(384, 238);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "Event selector";
@@ -158,13 +162,23 @@
             label1.TabIndex = 0;
             label1.Text = "Event name: ";
             // 
+            // splitterOptions
+            // 
+            splitterOptions.Dock = DockStyle.Top;
+            splitterOptions.Location = new Point(0, 337);
+            splitterOptions.Name = "splitterOptions";
+            splitterOptions.Size = new Size(384, 6);
+            splitterOptions.TabIndex = 3;
+            splitterOptions.TabStop = false;
+            // 
             // groupBox3
             // 
             groupBox3.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             groupBox3.Controls.Add(rtbObjectives);
-            groupBox3.Location = new Point(12, 343);
+            groupBox3.Dock = DockStyle.Fill;
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(364, 439);
+            groupBox3.Padding = new Padding(12, 3, 12, 3);
+            groupBox3.Size = new Size(384, 439);
             groupBox3.TabIndex = 2;
             groupBox3.TabStop = false;
             groupBox3.Text = "Objectives";
@@ -179,13 +193,24 @@
             rtbObjectives.TabIndex = 0;
             rtbObjectives.Text = "";
             // 
+            // splitterObjectives
+            // 
+            splitterObjectives.Dock = DockStyle.Top;
+            splitterObjectives.Location = new Point(0, 99);
+            splitterObjectives.Name = "splitterObjectives";
+            splitterObjectives.Size = new Size(384, 6);
+            splitterObjectives.TabIndex = 4;
+            splitterObjectives.TabStop = false;
+            // 
             // FrmMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(384, 791);
             Controls.Add(groupBox3);
+            Controls.Add(splitterOptions);
             Controls.Add(groupBox2);
+            Controls.Add(splitterObjectives);
             Controls.Add(groupBox1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmMain";
@@ -213,5 +238,7 @@
         private RichTextBox rtbOptions;
         private RichTextBox rtbObjectives;
         private Button btnDownloadUmaData;
+        private Splitter splitterOptions;
+        private Splitter splitterObjectives;
     }
 }
