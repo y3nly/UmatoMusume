@@ -2,6 +2,12 @@
 
 A Windows desktop application that assists players of Umamusume Pretty Derby by providing a real-time event tracker and choice assistant through OCR (Optical Character Recognition) technology.
 
+# Disclaimer
+
+I can't guarantee you that using this tool will not get your account banned.  
+This application interacts with the game through screen capture and OCR, which may violate Cygames' Terms of Service.  
+Use it at your own risk.
+
 ## Features
 
 ### Game Window Tracking
