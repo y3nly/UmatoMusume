@@ -1,10 +1,8 @@
-name: Build and Publish for Windows (.NET 9)
+name: Windows Release Build (.NET 9)
 
 on:
-  push:
-    tags:
-      - 'v*.*.*' # e.g. v1.0.0
-  workflow_dispatch:
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -22,20 +20,16 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Publish self-contained executable
+      - name: Publish for Windows (self-contained)
         run: dotnet publish -c Release -r win-x64 --self-contained true -o ./publish
 
-      - name: Upload published artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: umatomusume-win-x64
-          path: ./publish/
+      - name: Zip the publish directory
+        run: Compress-Archive -Path ./publish/* -DestinationPath UmatoMusume-win-x64.zip
+        shell: pwsh
 
-      - name: Create GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
+      - name: Upload zip to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: "UmatoMusume ${{ github.ref_name }}"
-          files: ./publish/**
+          files: UmatoMusume-win-x64.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
