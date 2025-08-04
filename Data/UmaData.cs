@@ -1,5 +1,6 @@
 ﻿using UmatoMusume.Models;
 using UmatoMusume.Utils;
+using FuzzySharp;
 
 namespace UmatoMusume.Data
 {
@@ -15,9 +16,10 @@ namespace UmatoMusume.Data
 
         public static List<Dictionary<string, string>> GetUmaEventOptions(this List<Umamusume> _umas, string _umaName, string _eventName)
         {
-            return _umas.Where(x => x.UmaName.Contains(_umaName))
+            return _umas
+                .Where(x => Fuzz.PartialRatio(x.UmaName, _umaName) >= 80)
                 .SelectMany(x => x.UmaEvents)
-                .Where(e => e.EventName.Contains(_eventName))
+                .Where(e => Fuzz.PartialRatio(e.EventName, _eventName) >= 80)
                 .Select(e => new Dictionary<string, string>(e.EventOptions))
                 .Distinct(new DictionaryComparer())
                 .ToList();
